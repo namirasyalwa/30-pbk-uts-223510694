@@ -177,6 +177,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+h2.title{
+  position: relative;
+  top: 20px;
+}
 .filter {
   margin-top: 20px;
 }
