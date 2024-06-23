@@ -1,74 +1,42 @@
 <template>
-<Header />
-<div class="container">
+  <div class="container">
     <div class="posts" id="posts">
-        <h2>Posts</h2>
-        <select v-model="selectedUser" class="selectModel" @change="fetchPosts">
-          <option v-for="user in users" :value="user.id" :key="user.id">{{ user.name }}</option>
-        </select>
-    
-        <div v-if="isLoading">
-          <span class="loading-message">Loading posts...</span>
-        </div>
-    
-        <ul v-if="!isLoading"> 
-            <li v-for="(post, index) in posts" :key="post.id">
-              <h3><b><i>{{ index + 1 }}. {{ post.title }}</i></b></h3>
-              <p>{{ post.body }}</p>
-            </li>
-        </ul>
+      <h2>Posts</h2>
+      <select v-model="postStore.selectedUser" class="selectModel" @change="postStore.fetchPosts">
+        <option v-for="user in postStore.usersList" :value="user.id" :key="user.id">{{ user.name }}</option>
+      </select>
+
+      <div v-if="postStore.isLoading">
+        <span class="loading-message">Loading posts...</span>
+      </div>
+
+      <ul v-if="!postStore.isLoading"> 
+        <li v-for="(post, index) in postStore.postsList" :key="post.id">
+          <h3><b><i>{{ index + 1 }}. {{ post.title }}</i></b></h3>
+          <p>{{ post.body }}</p>
+        </li>
+      </ul>
     </div>
-</div>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
-import Header from '@/components/Header.vue';
+import { onMounted, watch } from 'vue';
+import { usePostStore } from '@/stores/usePostStore';
 
-const isLoading = ref(false); 
-const selectedUser = ref(null);
-const selectedUserName = ref('');
-const users = ref([]);
-const posts = ref([]);
-
-const fetchUser = async () => {
-  try {
-    isLoading.value = true; 
-    const response = await fetch('https://jsonplaceholder.typicode.com/users');
-    const data = await response.json();
-    users.value = data;
-  } catch (error) {
-    console.error('Error fetching users:', error);
-  } finally {
-    isLoading.value = false; 
-  }
-};
-
-const fetchPosts = async () => {
-  if (!selectedUser.value) return;
-  isLoading.value = true;
-  try {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${selectedUser.value}`);
-    const data = await response.json();
-    posts.value = data;
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-  } finally {
-    isLoading.value = false; 
-  }
-};
+const postStore = usePostStore();
 
 onMounted(() => {
-  fetchUser();
+  postStore.fetchUsers();
 });
 
-watch(selectedUser, () => {
-  posts.value = []; 
-  fetchPosts();
-  const selectedUserObject = users.value.find(user => user.id === selectedUser.value);
-  selectedUserName.value = selectedUserObject ? selectedUserObject.name : '';
-}, { immediate: true }); 
+watch(() => postStore.selectedUser, () => {
+  postStore.posts = [];
+  postStore.fetchPosts();
+  postStore.setSelectedUser(postStore.selectedUser);
+}, { immediate: true });
 </script>
+
 
 <style scoped>
 

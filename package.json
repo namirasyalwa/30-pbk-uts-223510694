@@ -9,24 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
     "pinia": "^2.1.7",
-=======
-    "@quasar/extras": "^1.16.11",
-    "pinia": "^2.1.7",
-    "quasar": "^2.16.4",
->>>>>>> d433041 (Menambahkan Framework dan State Management)
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "@vitejs/plugin-vue": "^5.0.4",
-=======
     "@quasar/vite-plugin": "^1.7.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "sass": "^1.77.6",
->>>>>>> d433041 (Menambahkan Framework dan State Management)
     "vite": "^5.2.8"
   }
 }
